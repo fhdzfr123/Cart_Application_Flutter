@@ -1,0 +1,113 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(myApp());
+}
+
+class myApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new MaterialApp(
+      title: 'Application',
+      home: myWidget(),
+    );
+  }
+}
+
+class myWidget extends StatefulWidget {
+  @override
+  _myWidgetState createState() => _myWidgetState();
+}
+
+class _myWidgetState extends State<myWidget> {
+  List<String> listName = ["none"];
+  int num = 1;
+
+  addList() {
+    setState(() {
+      listName.add("hii");
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: new AppBar(
+        title: Text(
+          'Mere Application ${num + 1}',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+              fontStyle: FontStyle.italic),
+        ),
+        backgroundColor: Colors.grey,
+        automaticallyImplyLeading: true,
+        leading: new IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => exit(0),
+        ),
+      ),
+      body: ListView.separated(
+        //builder
+        itemCount: listName.length,
+        itemBuilder: (BuildContext context, int index) => ListTile(
+          title: Text(
+            listName[index],
+            style: TextStyle(fontSize: 15, color: Colors.blueGrey),
+          ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailedList(),
+                ));
+          },
+        ),
+
+        separatorBuilder: (BuildContext context, int index) => Divider(),
+      ),
+      floatingActionButton: new FloatingActionButton(
+        onPressed: () {
+          addList();
+        },
+        child: new Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.grey,
+      ),
+    );
+  }
+}
+
+class DetailedList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Application',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Mere Application',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                fontStyle: FontStyle.normal),
+          ),
+          backgroundColor: Colors.grey,
+          automaticallyImplyLeading: true,
+          leading: new IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+        ),
+        body: new Center(
+          child: Text('This is the detailed of Article'),
+        ),
+      ),
+    );
+  }
+}
