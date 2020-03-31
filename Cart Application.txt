@@ -1,0 +1,165 @@
+import 'package:flutter/material.dart';
+import 'ItemDetail.dart';
+
+void main(){
+  runApp(MaterialApp(home: MyApp()));
+}
+
+/*final products = List<ItemDetail>.generate(20, (i){
+  return ItemDetail("Product no ${i+1}");
+});
+
+List<String> cartList = List<String>();
+cartList.add(products[index].toString());
+
+
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context){
+                  return Myappi();
+                }
+              ));
+            },
+          )
+        ],
+
+*/
+
+class MyApp extends StatelessWidget {
+  final products = List<ItemDetail>.generate(20, (i){
+    return ItemDetail("Product no ${i+1}");
+  });
+
+  List<ItemDetail> cartList = List<ItemDetail>();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('khapa'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context){
+                  return Cart(cartList);
+                }
+              ));
+            },
+          )
+        ],
+
+        backgroundColor: Colors.pinkAccent,
+
+      ),
+      body: ProductList(products,(index){
+        cartList.add(products[index]);
+      }),
+    );
+  }
+}
+
+/*
+title: Text('Khapa'),
+backgroundColor: Colors.pinkAccent,
+actions: <Widget>[
+IconButton(
+icon: Icon(Icons.shopping_cart,color: Colors.white,),
+onPressed: (){
+Navigator.push(context,
+MaterialPageRoute(builder: (context){
+return Cart(cartList);
+}));
+},
+),], ),
+*/
+
+class ProductList extends StatelessWidget {
+  final products;
+  final ValueSetter<int> itemTap;
+  ProductList(this.products,this.itemTap);
+  @override
+  Widget build(BuildContext context) {
+    return  ListView.separated(
+      itemCount: products.length,
+      itemBuilder: (BuildContext Context,int index)=> ListTile(
+        leading: Icon(Icons.fastfood,color: Colors.redAccent,),
+        title: Text(products[index].name),
+        onTap: (){
+          itemTap(index);
+          SnackBar S=SnackBar(content: Text('Item ${index+1} Clicked'));
+          Scaffold.of(context).showSnackBar(S);
+        },
+
+      ),
+      separatorBuilder: (BuildContext Context,int index)=>Divider(),
+
+    );
+  }
+}
+
+class Cart extends StatelessWidget {
+  List<ItemDetail> selectedProduct;
+  Cart(this.selectedProduct);
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'Application',
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('Khapa'),
+            backgroundColor: Colors.pinkAccent,
+           leading: IconButton(
+             icon: Icon(Icons.arrow_back),
+             onPressed: (){
+               Navigator.pop(context,false);
+             },
+           ),
+          ),
+
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: <Widget>[
+              Center(
+                child: Text('item selected', style: TextStyle(
+                  shadows: [
+                    Shadow(
+                      blurRadius: 10.0,
+                      color: Colors.redAccent,
+                      offset: Offset(5.0,5.0)
+                    )
+                  ]
+                )),
+              ),
+              Expanded(
+                child: ListView.separated(
+                    itemCount: selectedProduct.length,
+                    itemBuilder: (BuildContext context,int index){
+                      return ListTile(
+                        leading: Icon(Icons.fastfood,color: Colors.redAccent,),
+                        title: Text(selectedProduct[index].name),
+                      );
+                    },
+                  separatorBuilder: (BuildContext context,int index) => Divider() ,
+                ),
+              )
+            ],
+          ),
+
+        )
+    );
+  }
+}
+
+
+
+
+class ItemDetail{
+  String name;
+  ItemDetail(this.name);
+}
